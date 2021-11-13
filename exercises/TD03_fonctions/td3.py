@@ -8,9 +8,9 @@ def tempsEnSeconde(temps):
     secondes += int(temps[3])
     return(secondes)
 
-temps = (3,23,1,34)
-print(type(temps))
-print(tempsEnSeconde(temps))
+#temps = (3,23,1,34)
+#print(type(temps))
+#print(tempsEnSeconde(temps))
 
 def secondeEnTemps(seconde):
     """Renvoie le temps (jour, heure, minute, seconde) qui correspond au nombre de seconde passé en argument"""
@@ -22,8 +22,8 @@ def secondeEnTemps(seconde):
     jours = heure // 24
     return(jours, heures, minutes, secondes)
 
-temps = secondeEnTemps(100000)
-print(temps[0],"jours",temps[1],"heures",temps[2],"minutes",temps[3],"secondes")
+#temps = secondeEnTemps(100000)
+#print(temps[0],"jours",temps[1],"heures",temps[2],"minutes",temps[3],"secondes")
 
 # Créer une fonction d'affichage d'un temps `afficheTemps`. Attention, les mots jour, heure et seconde doivent être au pluriel
 # s'il y en a plusieurs. S'il y en a zéro, ils ne doivent pas apparaître. print(message, end="")` permet de ne pas sauter une
@@ -52,7 +52,7 @@ def afficheTemps(temps):
     elif seconde == 1:
         print("1 seconde")
     
-afficheTemps((1,0,14,23)) 
+#afficheTemps((1,0,14,23)) 
 
 #Ecrire une fonction qui demande à l'utilisateur de rentrer un nombre de jours, d'heures, de minutes et
 #de secondes et qui renvoie un temps. Attention, si l'entrée utilisateur n'est pas correcte, par exemple 80 minutes,
@@ -88,7 +88,7 @@ def sommeTemps(temps1,temps2):
     somme = afficheTemps(secondeEnTemps(somme))
     return(somme)
 
-sommeTemps((2,3,4,25),(5,22,57,1))
+#sommeTemps((2,3,4,25),(5,22,57,1))
 
 #On veut maintenant calculer un pourcentage d'un temps. Par exemple, 20% de 2 jours et 36 minutes correspond
  #à 9 heures, 43 minutes et 12 secondes.
@@ -100,7 +100,7 @@ def proportionTemps(temps,proportion):
     tempsFinal = secondeEnTemps(secondes)
     return(tempsFinal)
 
-afficheTemps(proportionTemps((2,0,36,0),0.2))
+#afficheTemps(proportionTemps((2,0,36,0),0.2))
 #appeler la fonction en échangeant l'ordre des arguments
 
 def echangeOrdre(temps):
@@ -110,7 +110,7 @@ def echangeOrdre(temps):
     secondes = str(int(temps[3]))
     return(secondes + " secondes", minutes + " minutes", heures + " heures", jours + " jours")
 
-print(echangeOrdre(proportionTemps((2,0,36,0),0.2)))
+#print(echangeOrdre(proportionTemps((2,0,36,0),0.2)))
 
 #On veut maintenant afficher un temps sous forme de date, en supposant que le temps 0 est le 1 janvier 1970 à 00:00:00.
 #* Implémenter une fonction `tempsEnDate`qui donne la date sous la forme (année, jour, heure, minute, seconde).
@@ -118,43 +118,84 @@ print(echangeOrdre(proportionTemps((2,0,36,0),0.2)))
 #* (Optionnel) Gérer également les mois.
 
 def tempsEnDate(temps):
-    temps0 = (1970, 1, 0, 0, 0, 0)
+    temps0 = (1970, 0, 0, 0, 0, 0)
     annee = 0
-    mois = 1
-    m1 = 0
-    i = -1
-    fevrier = 27
-    m = 30
-    a = 0
-    b = 0
-    c = 0
-    while b < temps[0]:
-        i = i ** a
-        if i == 1:
-            m = m + 1
-        if temps[0] >= 59:
-            m = fevrier
-        m += m1
-        if temps[0] >= m1:
-            mois += 1
-        m1 = m
-        a += 1
-        b += 1
-    jours = temps[0] - m1
-    print(temps[0])
-    print(m1)
-    annee = mois // 12
-    mois %= 12
-    c = (annee, mois, jours, temps[1], temps[2], temps[3])
+    mois = 0
+    jours_tot = temps[0]
+    if jours_tot >= 365:
+        while jours_tot >= 365:
+            annee += 1
+            jours_tot -= 365
+    jours = jours_tot
+    if jours_tot >= 32:
+        mois += 1
+        jours -= 31
+    if jours_tot >= 59:
+        mois += 1
+        jours -= 27
+    if jours_tot >= 90:
+        mois += 1
+        jours -= 31
+    if jours_tot >= 120:
+        mois += 1
+        jours -= 30
+    if jours_tot >= 151:
+        mois += 1
+        jours -= 31
+    if jours_tot >= 181:
+        mois += 1
+        jours -= 30
+    if jours_tot >= 212:
+        mois += 1
+        jours -= 31
+    if jours_tot >= 243:
+        mois += 1
+        jours -= 31
+    if jours_tot >= 273:
+        mois += 1
+        jours -= 30
+    if jours_tot >= 304:
+        mois += 1
+        jours -= 31
+    if jours_tot > 334:
+        mois += 1
+        jours -= 30
+    c = (annee, mois + 1, jours, temps[1], temps[2], temps[3])
     date = (temps0[0] + c[0], temps0[1] + c[1], temps0[2] + c[2], temps0[3] + c[3], temps0[4] + c[4], temps0[5] + c[5])
     return(date)
 
 
-def afficheDate(date = -1):
-    pass
+def afficheDate(date):
+    """Affiche la date"""
+    if date[1] == 1:
+        mois = "Janvier"
+    if date[1] == 2:
+        mois = "Fevrier"
+    if date[1] == 3:
+        mois = "Mars"
+    if date[1] == 4:
+        mois = "Avril"
+    if date[1] == 5:
+        mois = "Mai"
+    if date[1] == 6:
+        mois = "Juin"
+    if date[1] == 7:
+        mois = "Juillet"
+    if date[1] == 8:
+        mois = "Aout"
+    if date[1] == 9:
+        mois = "Septembre"
+    if date[1] == 10:
+        mois = "Octobre"
+    if date[1] == 11:
+        mois = "Novembre"
+    if date[1] == 12:
+        mois = "Decembre"
+    print(date[2], mois, date[0], " à ", date[3], "h", date[4], " , ", date[5], "s")
     
 temps = secondeEnTemps(1000000000)
 afficheTemps(temps)
-print(tempsEnDate(temps))
 afficheDate(tempsEnDate(temps))
-afficheDate()
+#from time import*
+#afficheDate(time.gmtime(0))
+#time.gmtime()
