@@ -119,6 +119,15 @@ def echangeOrdre(temps):
 
 def tempsEnDate(temps):
     temps0 = (1970, 0, 0, 0, 0, 0)
+    jours_tot = temps[0]
+    annee = jours_tot // 365
+    jours = jours_tot % 365
+    c = (annee, jours, temps[1], temps[2], temps[3])
+    date = (1970 + annee, jours, temps[1], temps[2], temps[3])
+    return(date)
+
+#def tempsEnDate1(temps):
+    temps0 = (1970, 0, 0, 0, 0, 0)
     annee = 0
     mois = 0
     jours_tot = temps[0]
@@ -164,8 +173,11 @@ def tempsEnDate(temps):
     date = (temps0[0] + c[0], temps0[1] + c[1], temps0[2] + c[2], temps0[3] + c[3], temps0[4] + c[4], temps0[5] + c[5])
     return(date)
 
-
 def afficheDate(date):
+    """Affiche la date"""
+    print(date[1], "jours", date[0], " à ", date[2], "h", date[3], " , ", date[4], "s")
+
+def afficheDate1(date):
     """Affiche la date"""
     if date[1] == 1:
         mois = "Janvier"
@@ -191,11 +203,73 @@ def afficheDate(date):
         mois = "Novembre"
     if date[1] == 12:
         mois = "Decembre"
-    print(date[2], mois, date[0], " à ", date[3], "h", date[4], " , ", date[5], "s")
+    #print(date[2], mois, date[0], " à ", date[3], "h", date[4], " , ", date[5], "s")
     
-temps = secondeEnTemps(1000000000)
-afficheTemps(temps)
-afficheDate(tempsEnDate(temps))
+#temps = secondeEnTemps(1000000000)
+#afficheTemps(temps)
+#afficheDate(tempsEnDate(temps))
 #from time import*
 #afficheDate(time.gmtime(0))
 #time.gmtime()
+
+#Attention, tous les 4 ans les années sont bisextiles (un jour de plus) sauf les multiples de 100 Donner un code qui prend 
+#un nombre de jours et affiche toutes les années bisextiles depuis 1 janvier 2020 à 00:00:00 jusqu'à la fin de ces jours.
+
+def bisextile(jour):
+    annee = 2020
+    jours = 0
+    a = 0
+    annee_bisextiles = []
+    while jour > 366:
+        if annee % 4 == 0 and annee % 100 != 0:
+            jour -= 366
+            annee_bisextiles.append(annee)
+            annee += 1
+        else: 
+            jour -= 365
+            annee += 1
+    return(annee_bisextiles)
+
+#print(bisextile(20000))
+
+#Implémenter une fonction `nombreBisextile` qui calcule le nombre d'années bisextiles pour un nombre de jour donnés pour
+#corriger votre fonction de calcul de la date.
+
+def nombreBisextile(jour):
+    """calcule le nombre d'années bisextiles pour un nombre de jour donnés."""
+    annee = 0
+    jours = 0
+    a = 0
+    annee_bisextiles = []
+    while jour > 366:
+        if annee % 4 == 0 and annee % 100 != 0:
+            jour -= 366
+            annee_bisextiles.append(annee)
+            annee += 1
+        else: 
+            jour -= 365
+            annee += 1
+    nombre_d_annes_bisextiles = len(annee_bisextiles)
+    return(nombre_d_annes_bisextiles)
+
+def tempsEnDateBisextile(temps):
+    """corrige la fonction de calcul de la date."""
+    date = tempsEnDate(temps)
+    a = 0
+    jours = 0
+    annee = 0
+    if date[1] >= nombreBisextile(temps[0]):
+        jours = date[1] - nombreBisextile(temps[0])
+    else:
+        annee = date[0] - 1
+        a = nombreBisextile(temps[0]) - date[1]
+        if annee % 4 and annee % 100 != 0:
+            b = 366
+        else: b = 365
+        jours = b - a
+    return(annee, jours, date[2], date[3], date[4])
+   
+#print(nombreBisextile(20000))
+temps = secondeEnTemps(1000000000)
+afficheTemps(temps)
+afficheDate(tempsEnDateBisextile(temps))
